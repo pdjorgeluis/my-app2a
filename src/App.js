@@ -1,16 +1,22 @@
 import logo from './logo.svg';
 import './App.css';
+import React from 'react'
 
-const App = (props) => {
-  const { notes } = props;
+//Components
+const Note = ({ note }) => {
+  return(
+    <li>note.content</li>
+  );
+}
+
+const App = ({notes}) => {
+  
   return (
     <div>
       <h1>Notes</h1>
       <ul>
         {notes.map(note => 
-        <li key={note.id}>
-          {note.content}
-          </li>
+          <Note key={note.id} note={note} />
         )}
       </ul>
     </div>
