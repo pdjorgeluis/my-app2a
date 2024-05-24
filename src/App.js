@@ -6,6 +6,9 @@ import Note from './components/Note';
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
+//Services
+import noteService from './services/notes'
+
 const App = () => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('')
@@ -13,29 +16,62 @@ const App = () => {
 
   useEffect(() => {
     console.log('effect');
-    axios
+    /*axios
       .get('http://localhost:3001/notes')
       .then(response => {
         console.log('promise fulfilled');
         setNotes(response.data);
+      })*/
+    noteService
+      .getAll()
+      .then(response => {
+        setNotes(response.data)
       })
   }, []);
-  console.log('render', notes.length, 'notes');
+  //console.log('render', notes.length, 'notes');
 
   const addNote = (event) => {
     event.preventDefault()
     const noteObject = {
       content: newNote,
       important: Math.random() < 0.5,
-      id: notes.length + 1
+      //id: notes.length + 1
     }
-    setNotes(notes.concat(noteObject))
-    setNewNote('')
+    //setNotes(notes.concat(noteObject))
+   /*axios
+      .post('http://localhost:3001/notes', noteObject)
+      .then(response => {
+        console.log(response)
+        setNotes(notes.concat(response.data))
+        setNewNote('')
+      })*/
+    noteService
+      .create(noteObject)
+      .then(response => {
+        setNotes(notes.concat(response.data));
+        setNewNote('')
+      })  
   }
 
+  //Event Handlers
   const handleNoteChange = (event) => {
     console.log(event.target.value);
     setNewNote(event.target.value)
+  }
+
+  const toggleImportanceOf = id => {
+    const url = `http://localhost:3001/notes/${id}`
+    const note = notes.find(n => n.id === id)
+    const changedNote = { ...note, important: !note.important }
+  
+    /*axios.put(url, changedNote).then(response => {
+      setNotes(notes.map(n => n.id !== id ? n : response.data))
+    })*/
+    noteService
+      .update(id, changedNote)
+      .then(response => {
+        setNotes(notes.map(note => note.id !== id ? note : response.data));
+      })
   }
 
   // Array of notes to Show
@@ -51,7 +87,7 @@ const App = () => {
         </div>
         <ul>
         {notesToShow.map(note => 
-          <Note key={note.id} note={note} />
+          <Note key={note.id} note={note} toggleImportance={() => toggleImportanceOf(note.id)}/>
         )}
         </ul>
       
