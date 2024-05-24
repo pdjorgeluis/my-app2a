@@ -17,8 +17,9 @@ const update = (id, newObject) => {
 }
      
 
-export default {
+export default {getAll, create, update}
+/*{
     getAll: getAll,
     create: create,
     update: update
-}
+}*/
