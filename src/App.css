@@ -36,3 +36,25 @@
     transform: rotate(360deg);
   }
 }
+
+.note {
+  color: rgb(15, 185, 72);
+  padding-top: 3px;
+  font-size: 15px;
+}
+
+.error {
+  color: red;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+h1 {
+  color: green;
+
+  font-style: italic;
+}
